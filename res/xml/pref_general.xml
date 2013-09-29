@@ -1,4 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <EditTextPreference android:dialogTitle="OPRoS Component Engine Path" android:title="OPRoS Component Engine Path" android:key="@string/engine_path"/>
+
+    <kr.yudonguk.opros.preference.FilePathPreference
+        android:key="@string/engine_path"
+        android:title="OPRoS Component Engine Path" />
 
 </PreferenceScreen>

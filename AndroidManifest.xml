@@ -26,6 +26,7 @@
             android:name="kr.yudonguk.opros.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>
+        <activity android:name=".preference.FilePathPreference$FilePickerActivity"></activity>
     </application>
 
 </manifest>

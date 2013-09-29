@@ -43,6 +43,16 @@ public class SettingsActivity extends PreferenceActivity
 		setupSimplePreferencesScreen();
 	}
 
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+
+		PreferenceScreen preferenceScreen = getPreferenceScreen();
+		for (int i = 0; i < preferenceScreen.getPreferenceCount(); i++)
+			bindPreferenceSummaryToValue(preferenceScreen.getPreference(i));
+	}
+
 	/**
 	 * Shows the simplified settings UI if the device configuration if the
 	 * device configuration dictates that a simplified, single-pane UI should be
