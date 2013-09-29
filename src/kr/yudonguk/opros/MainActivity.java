@@ -4,17 +4,14 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity
 		implements ActionBar.TabListener
@@ -114,26 +111,52 @@ public class MainActivity extends FragmentActivity
 	public class SectionsPagerAdapter extends FragmentPagerAdapter
 	{
 		final String[] mTitles;
+		final Class<?>[] mFragments;
 
 		public SectionsPagerAdapter(FragmentManager fm)
 		{
 			super(fm);
 
-			mTitles = getResources()
-					.getStringArray(R.array.main_section_titles);
+			Resources resources = getResources();
+
+			mTitles = resources.getStringArray(R.array.main_section_titles);
+
+			String[] fragments = resources
+					.getStringArray(R.array.main_section_fragments);
+			mFragments = new Class[mTitles.length];
+			for (int i = 0; i < mFragments.length; i++)
+			{
+				try
+				{
+					mFragments[i] = Class.forName(fragments[i]);
+				}
+				catch (Exception e)
+				{
+					mFragments[i] = Fragment.class;
+				}
+			}
 		}
 
 		@Override
 		public Fragment getItem(int position)
 		{
-			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
-			Fragment fragment = new DummySectionFragment();
-			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-			fragment.setArguments(args);
-			return fragment;
+			if (0 > position && position >= mTitles.length)
+				return null;
+
+			try
+			{
+				return (Fragment) mFragments[position].newInstance();
+			}
+			catch (InstantiationException e)
+			{
+				e.printStackTrace();
+			}
+			catch (IllegalAccessException e)
+			{
+				e.printStackTrace();
+			}
+
+			return null;
 		}
 
 		@Override
@@ -152,34 +175,4 @@ public class MainActivity extends FragmentActivity
 			return null;
 		}
 	}
-
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment
-	{
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-
-		public DummySectionFragment()
-		{}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState)
-		{
-			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
-					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return rootView;
-		}
-	}
-
 }

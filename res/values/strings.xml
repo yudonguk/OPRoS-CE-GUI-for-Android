@@ -8,5 +8,9 @@
         <item>Logs</item>
         <item>Packages</item>
     </string-array>
+    <string-array name="main_section_fragments">
+        <item>android.support.v4.app.Fragment</item>
+        <item>android.support.v4.app.Fragment</item>
+    </string-array>
 
 </resources>
